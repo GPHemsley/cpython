@@ -2146,7 +2146,7 @@ class ElementTest(ElementTestCase, unittest.TestCase):
         self.assertEqual(element_bar.tail, None)
 
     def test_element_copy(self):
-        element_foo2 = self.element_foo.copy()
+        element_foo2 = copy.copy(self.element_foo)
 
         self.assertIsNot(element_foo2, self.element_foo)
         self.assertEqual(element_foo2.tag, self.element_foo.tag)
