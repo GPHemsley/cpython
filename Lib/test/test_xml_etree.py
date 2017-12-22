@@ -2106,6 +2106,75 @@ class BadElementPathTest(ElementTestCase, unittest.TestCase):
             pass
 
 
+class ElementTest(ElementTestCase, unittest.TestCase):
+
+    def setUp(self):
+        self.element_foo = ET.Element("foo")
+
+    def test_element(self):
+        e = ET.Element("foo", { "bar": "baz" }, bix="quix")
+
+        self.assertEqual(e.tag, "foo")
+        self.assertEqual(e.attrib, { "bar": "baz", "bix": "quix" })
+        self.assertIsNone(e.text)
+        self.assertIsNone(e.tail)
+
+    def test_element_attrib_none(self):
+        self.assertRaises(TypeError, ET.Element, "foo", None)
+
+    def test_element_attrib_tuple(self):
+        self.assertRaises(TypeError, ET.Element, "foo", ())
+
+    def test_element_attrib_list(self):
+        self.assertRaises(TypeError, ET.Element, "foo", [])
+
+    def test_element_attrib_set(self):
+        self.assertRaises(TypeError, ET.Element, "foo", set())
+
+    def test_element_repr(self):
+        self.assertEqual(repr(self.element_foo), "<Element 'foo' at {:#x}>".format(id(self.element_foo)))
+
+    def test_element_makeelement(self):
+        attrib = { "baz": "foobar" }
+        element_bar = self.element_foo.makeelement("bar", attrib)
+
+        self.assertEqual(type(self.element_foo), type(element_bar))
+        self.assertEqual(element_bar.tag, "bar")
+        self.assertIsNot(element_bar.attrib, attrib)
+        self.assertEqual(element_bar.attrib, attrib)
+        self.assertEqual(element_bar.text, None)
+        self.assertEqual(element_bar.tail, None)
+
+    def test_element_copy(self):
+        element_foo2 = self.element_foo.copy()
+
+        self.assertIsNot(element_foo2, self.element_foo)
+        self.assertEqual(element_foo2.tag, self.element_foo.tag)
+        self.assertEqual(element_foo2.attrib, self.element_foo.attrib)
+        self.assertEqual(element_foo2.text, self.element_foo.text)
+        self.assertEqual(element_foo2.tail, self.element_foo.tail)
+
+    def test_element_len(self):
+        self.assertEqual(len(self.element_foo), 0)
+
+        element_bar = ET.Element("bar")
+        element_bar.append(self.element_foo)
+
+        self.assertEqual(len(element_bar), 1)
+
+    def test_element_bool(self):
+        self.assertFalse(bool(self.element_foo))
+
+        element_bar = ET.Element("bar")
+        element_bar.append(self.element_foo)
+
+        self.assertTrue(bool(element_bar))
+
+        with self.assertWarns(FutureWarning):
+            bool(self.element_foo)
+            bool(element_bar)
+
+
 class ElementTreeTypeTest(unittest.TestCase):
     def test_istype(self):
         self.assertIsInstance(ET.ParseError, type)
@@ -3147,6 +3216,7 @@ def test_main(module=None):
         BasicElementTest,
         BadElementTest,
         BadElementPathTest,
+        ElementTest,
         ElementTreeTest,
         IOTest,
         ParseErrorTest,
