@@ -163,7 +163,8 @@ class ElementTree_Element_UnitTest(unittest.TestCase):
         element_foo = ET.Element("foo", { "zix": "wyp" })
         element_foo.append(ET.Element("bar", { "baz": "qix" }))
 
-        element_foo2 = element_foo.copy()
+        with self.assertWarns(DeprecationWarning):
+            element_foo2 = element_foo.copy()
 
         with self.subTest("elements are not the same"):
             self.assertIsNot(element_foo2, element_foo)

@@ -94,6 +94,7 @@ VERSION = "1.3.0"
 import sys
 import re
 import warnings
+import copy
 import io
 import collections
 import collections.abc
@@ -194,6 +195,13 @@ class Element:
         original tree.
 
         """
+        warnings.warn(
+            "elem.copy() is deprecated. Use copy.copy(elem) instead.",
+            DeprecationWarning
+            )
+        return self.__copy__()
+
+    def __copy__(self):
         elem = self.makeelement(self.tag, self.attrib)
         elem.text = self.text
         elem.tail = self.tail

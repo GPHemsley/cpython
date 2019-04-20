@@ -768,6 +768,12 @@ static PyObject *
 _elementtree_Element_copy_impl(ElementObject *self)
 /*[clinic end generated code: output=84660e8524276b22 input=1f8134305a7719a3]*/
 {
+    if (PyErr_WarnEx(PyExc_DeprecationWarning,
+                     "elem.copy() is deprecated. Use copy.copy(elem) instead.",
+                     1) < 0) {
+        return NULL;
+    }
+
     return _elementtree_Element___copy___impl(self);
 }
 
