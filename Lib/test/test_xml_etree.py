@@ -159,6 +159,33 @@ class ElementTree_Element_UnitTest(unittest.TestCase):
             self.assertNotEqual(element_foo.attrib, attrib)
 
 
+    def test_copy(self):
+        element_foo = ET.Element("foo", { "zix": "wyp" })
+        element_foo.append(ET.Element("bar", { "baz": "qix" }))
+
+        element_foo2 = element_foo.copy()
+
+        with self.subTest("elements are not the same"):
+            self.assertIsNot(element_foo2, element_foo)
+
+        with self.subTest("string attributes are the same"):
+            self.assertIs(element_foo2.tag, element_foo.tag)
+            self.assertIs(element_foo2.text, element_foo.text)
+            self.assertIs(element_foo2.tail, element_foo.tail)
+
+        with self.subTest("string attributes are equal"):
+            self.assertEqual(element_foo2.tag, element_foo.tag)
+            self.assertEqual(element_foo2.text, element_foo.text)
+            self.assertEqual(element_foo2.tail, element_foo.tail)
+
+        with self.subTest("children are the same"):
+            for (child1, child2) in itertools.zip_longest(element_foo, element_foo2):
+                self.assertIs(child1, child2)
+
+        with self.subTest("attrib is a copy"):
+            self.assertEqual(element_foo2.attrib, element_foo.attrib)
+
+
     def test___copy__(self):
         element_foo = ET.Element("foo", { "zix": "wyp" })
         element_foo.append(ET.Element("bar", { "baz": "qix" }))

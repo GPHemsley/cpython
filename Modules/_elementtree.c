@@ -759,6 +759,18 @@ _elementtree_Element___copy___impl(ElementObject *self)
     return (PyObject*) element;
 }
 
+/*[clinic input]
+_elementtree.Element.copy
+
+[clinic start generated code]*/
+
+static PyObject *
+_elementtree_Element_copy_impl(ElementObject *self)
+/*[clinic end generated code: output=84660e8524276b22 input=1f8134305a7719a3]*/
+{
+    return _elementtree_Element___copy___impl(self);
+}
+
 /* Helper for a deep copy. */
 LOCAL(PyObject *) deepcopy(PyObject *, PyObject *);
 
@@ -3801,6 +3813,7 @@ static PyMethodDef element_methods[] = {
 
     _ELEMENTTREE_ELEMENT_MAKEELEMENT_METHODDEF
 
+    _ELEMENTTREE_ELEMENT_COPY_METHODDEF
     _ELEMENTTREE_ELEMENT___COPY___METHODDEF
     _ELEMENTTREE_ELEMENT___DEEPCOPY___METHODDEF
     _ELEMENTTREE_ELEMENT___SIZEOF___METHODDEF
